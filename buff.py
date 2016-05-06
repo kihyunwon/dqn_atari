@@ -3,22 +3,23 @@ import numpy as np
 
 class Buffer:
 
-	def __init__(self, params):
-    	history_length = params.history_length
-    	width = params.width
-    	height = params.height
-    	size = params.batch_size
-    	self.buffer = np.zeros((size, width, height, history_length), dtype=np.uint8)
+    def __init__(self, params):
+        history_length = params.history_length
+        width = params.width
+        height = params.height
+        self.dims = (width, height, history_length)
+        self.buffer = np.zeros(self.dims, dtype=np.uint8)
 
-  	def add(self, state):
-    	self.buffer[0, :, :, -1] = self.buffer[0, :, :, 1:]
-    	self.buffer[0, :, :, -1] = state
+    def add(self, state):
+        self.buffer[:, :, :-1] = self.buffer[:, :, 1:]
+        self.buffer[:, :, -1] = state
 
-  	def getState(self):
-    	return self.buffer[0]
+    def getInput(self):
+        x = np.reshape(self.buffer, (1,) + self.dims)
+        return x
 
-  	def getAllStates(self):
-    	return self.buffer
+    def getState(self):
+        return self.buffer
 
-  	def reset(self):
-    	self.buffer.fill(0)
+    def reset(self):
+        self.buffer.fill(0)

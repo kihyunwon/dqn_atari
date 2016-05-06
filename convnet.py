@@ -75,7 +75,7 @@ class ConvNet:
         # initialize fully-connected layers
         for layer in range(self.fc_layers):
             with tf.variable_scope('hidden' + str(layer)) as scope:
-                if connect_layer == 0:
+                if layer == 0:
                     in_size = dim
                 else:
                     in_size = self.fc_size[layer-1]
@@ -83,7 +83,7 @@ class ConvNet:
                 out_size = self.fc_size[layer]
                 shape = [in_size, out_size]
                 w = self.create_weight(shape)
-                b = self.create_bia([out_size])
+                b = self.create_bias([out_size])
                 self.weights[w.name] = w
                 self.weights[b.name] = b
                 hidden = tf.nn.relu_layer(self.layers[-1], w, b, name=scope.name)
@@ -94,9 +94,9 @@ class ConvNet:
             in_size = self.fc_size[self.fc_layers - 1]
             out_size = self.out_dims
             shape = [in_size, out_size]
-            W = self.create_weight(shape)
+            w = self.create_weight(shape)
             b = self.create_bias([out_size])
-            self.weights[W.name] = W
+            self.weights[w.name] = w
             self.weights[b.name] = b
             hidden = tf.nn.bias_add(tf.matmul(self.layers[-1], w), b)
             self.layers.append(hidden)

@@ -8,6 +8,6 @@ A Tensorflow DQN implementation based on [DeepMind's DQN](https://storage.google
 - [Tensorflow](https://www.tensorflow.org)
 
 ## Usage
-To run, `python atari.py --game <env_name>`. It will run `Breakout-v0` by default.
+To run, `python atari.py --game <env_name>`. It will run `SpaceInvaders-v0` by default.
 Set `--display` flag to see the game while training.
 
