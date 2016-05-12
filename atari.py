@@ -35,7 +35,8 @@ dqnarg.add_argument("--replay_start_size", type=int, default=50000, help="A unif
 dqnarg.add_argument("--save_weights", type=int, default=10000, help="Save the mondel after this many steps.")
 
 testarg = parser.add_argument_group('Test')
-testarg.add_argument("--display", type=bool, default=False, help="Display screen during testing.")
+testarg.add_argument("--display", dest="display", help="Display screen during testing.")
+testarg.set_defaults(display=False)
 testarg.add_argument("--random_starts", type=int, default=30, help="Perform max this number of no-op actions to be performed by the agent at the start of an episode.")
 testarg.add_argument("--ckpt_dir", default='model', help="Tensorflow checkpoint directory.")
 testarg.add_argument("--out", help="Output directory for gym.")

@@ -9,5 +9,5 @@ A Tensorflow DQN implementation based on [DeepMind's DQN](https://storage.google
 
 ## Usage
 To run, `python atari.py --game <env_name>`. It will run `SpaceInvaders-v0` by default.
-Set `--display` flag to see the game while training.
+Set `--display True` flag to see the game while training.
 

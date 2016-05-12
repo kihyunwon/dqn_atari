@@ -6,6 +6,7 @@ class Environment:
     def __init__(self, params):
         self.gym = gym.make(params.game)
         self.observation = None
+        self.display = params.display
         self.terminal = False
         self.dims = (params.width, params.height)
 
@@ -17,6 +18,8 @@ class Environment:
         self.terminal = False
 
     def act(self, action):
+        if self.display:
+            self.gym.render()
         self.observation, reward, self.terminal, info = self.gym.step(action)
         return reward
 
