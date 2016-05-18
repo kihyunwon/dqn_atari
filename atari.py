@@ -39,7 +39,7 @@ testarg.add_argument("--display", dest="display", help="Display screen during te
 testarg.set_defaults(display=False)
 testarg.add_argument("--random_starts", type=int, default=30, help="Perform max this number of no-op actions to be performed by the agent at the start of an episode.")
 testarg.add_argument("--ckpt_dir", type=str, default='model', help="Tensorflow checkpoint directory.")
-testarg.add_argument("--out", help="Output directory for gym.")
+testarg.add_argument("--out", type=str, default='output', help="Output directory for gym.")
 testarg.add_argument("--episodes", type=int, default=100, help="Number of episodes.")
 testarg.add_argument("--seed", type=int, help="Random seed.")
 
@@ -50,6 +50,9 @@ if args.seed:
 
 if not os.path.exists(args.ckpt_dir):
 	os.makedirs(args.ckpt_dir)
+
+if not os.path.exists(args.out):
+	os.makedirs(args.out)
 
 # initialize gym environment and dqn
 env = Environment(args)

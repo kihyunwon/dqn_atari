@@ -18,7 +18,7 @@ class Trainer:
             failures = 0
             total_loss = 0
 
-            print "starting %d random plays to populate replay memory" % self.agent.replay_start_size
+            print "\nstarting %d random plays to populate replay memory" % self.agent.replay_start_size
             for i in xrange(self.agent.replay_start_size):
                 # follow random policy
                 state, action, reward, next_state, terminal = self.agent.observe(1)
@@ -27,6 +27,7 @@ class Trainer:
                     successes += 1
                 elif terminal:
                     failures += 1
+                    self.agent.restart()
 
                 if (i+1) % 10000 == 0:
                     print "\nmemory size: %d" % len(self.agent.memory),\
@@ -35,6 +36,7 @@ class Trainer:
             
             sample_success = 0
             sample_failure = 0
+
             print "\nstart training..."
             start_time = time.time()
             for i in xrange(self.agent.train_steps):
@@ -43,7 +45,8 @@ class Trainer:
                 state, action, reward, next_state, terminal = self.agent.observe(lr)
 
                 if len(self.agent.memory) > self.agent.batch_size and (i+1) % self.agent.update_freq == 0:
-                    sample_success, sample_failure, loss = self.agent.doMinibatch(sess, sample_success, sample_failure)
+                    sample_success, sample_failure, loss = \
+                        self.agent.doMinibatch(sess, sample_success, sample_failure)
                     total_loss += loss
 
                 if (i+1) % self.agent.steps == 0:
@@ -53,6 +56,7 @@ class Trainer:
                     successes += 1
                 elif terminal:
                     failures += 1
+                    self.agent.restart()
                 
                 if ((i+1) % self.agent.save_weights == 0):
                     self.agent.save(self.saver, sess, i+1)
@@ -68,6 +72,6 @@ class Trainer:
                           "\nSample successes: ", sample_success,\
                           "\nSample failures: ", sample_failure,\
                           "\nAverage batch loss: ", avg_loss,\
-                          "\nBatch training time: ", (end_time-start_time)/self.agent.batch_size, "s"
+                          "\nBatch training time: ", (end_time-start_time)/self.agent.batch_size, "sec"
                     start_time = time.time()
                     total_loss = 0

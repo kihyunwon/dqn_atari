@@ -66,17 +66,20 @@ class DQN:
         # backprop with RMS loss
         self.task = self.optimizer.minimize(self.loss, global_step=self.global_step)
 
-    def randomRestart(self):
+    def restart(self):
         self.env.restart()
+
+    def randomRestart(self):
+        self.restart()
+        # let env change for len(random_starts)
         for _ in range(self.random_starts):
-            action = rand.randrange(self.num_actions)
-            reward = self.env.act(action)
+            reward = self.env.act(0) # no op 
             state = self.env.getScreen()
             terminal = self.env.isTerminal()
             self.buffer.add(state)
 
             if terminal:
-                self.env.restart()
+                self.restart()
 
     def trainEps(self, train_step):
         if train_step < self.eps_endt:
@@ -134,7 +137,8 @@ class DQN:
         for i in xrange(self.episodes):
             terminal = False
             while not terminal:
-                action, reward, screen, terminal = self.observe(self.eps)
+                state, action, reward, next_state, terminal = self.observe(self.eps)
+            self.env.restart()
 
     def copy_weights(self, sess):
         for key in self.train_net.weights.keys():
